@@ -1,0 +1,46 @@
+* text=auto eol=lf
+
+*.py text diff=python
+*.md text diff=markdown
+*.toml text
+*.yaml text
+*.yml text
+*.json text
+*.cff text
+*.txt text
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+
+# These formats must not be committed. Marking them binary also prevents an
+# accidental textual diff if a local override bypasses .gitignore.
+*.nc binary
+*.nc4 binary
+*.h5 binary
+*.hdf binary
+*.hdf5 binary
+*.he5 binary
+*.grib binary
+*.grb binary
+*.grib2 binary
+*.csv binary
+*.tsv binary
+*.npy binary
+*.npz binary
+*.parquet binary
+*.feather binary
+*.pkl binary
+*.pickle binary
+*.joblib binary
+*.onnx binary
+*.pt binary
+*.pth binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.svg binary
+*.eps binary
+*.tif binary
+*.tiff binary
+*.pdf binary
+*.doc binary
+*.docx binary

@@ -1,0 +1,98 @@
+profile: report-reproduction
+
+paths:
+  data_root: ${CO_DATA_ROOT}
+  output_root: ${CO_OUTPUT_ROOT}
+  cache_root: ${CO_CACHE_ROOT}
+
+inputs:
+  iasi_l2_glob: iasi_l2/*.nc
+  merra2_glob: merra2/*.nc
+  cams_glob: cams/*.nc
+  tropomi_glob: validation/tropomi/{year}/*.nc
+  mopitt_glob: validation/mopitt/{year}/*.nc
+  frp_csv: covariates/frp_monthly_domain.csv
+
+variables:
+  latitude: latitude
+  longitude: longitude
+  iasi_column: CO_total_column
+  iasi_relative_error: CO_total_column_error
+  iasi_quality_flag: retrieval_quality_flag
+  iasi_partial_column: CO_partial_column_profile
+  iasi_partial_error: CO_partial_column_error
+  merra2_co: CO
+  merra2_delp: DELP
+  merra2_pressure_edges: PLE
+  cams_column: tcco
+  tropomi_column: CO_column_number_density
+  mopitt_column: RetrievedCOTotalColumn
+
+source_units:
+  iasi_column: mol/m²
+  cams_column: kg/m²
+  tropomi_column: mol/m²
+  mopitt_column: molecules/cm²
+
+domain:
+  longitude: [-80.0, 60.0]
+  latitude: [-55.0, 10.0]
+  resolution: [0.625, 0.5]
+  shape: [131, 225]
+
+regions:
+  south_america: {longitude: [-80.0, -30.0], latitude: [-30.0, 5.0]}
+  atlantic: {longitude: [-30.0, 10.0], latitude: [-10.0, 10.0]}
+  africa: {longitude: [10.0, 50.0], latitude: [-20.0, 10.0]}
+
+period:
+  product_years: [2007, 2024]
+  benchmark_training_years: [2007, 2017]
+  final_training_years: [2013, 2017]
+  evaluation_years: [2018, 2024]
+  validation_years: [2023, 2024]
+  months: [8, 9, 10]
+
+units:
+  internal: mol/cm²
+  validation: molecules/cm²
+
+model:
+  primary: random_forest
+  compared: [linear_scaling, quantile_mapping, quantile_delta_mapping, ridge, hgb, random_forest]
+  feature_set: ABCD
+  frp_scope: domain_monthly
+  seed: 42
+  pixels_per_day: 1000
+  max_samples: 600000
+  statistical_quantiles: 10
+  minimum_cell_samples: 20
+  ratio_clip: [0.2, 5.0]
+
+validation:
+  map_minimum_satellites: 1
+  strong_agreement_satellites: 3
+  neutral_z_threshold: 0.25
+  regional_iqr_quantile: 0.33
+  external_validation_is_partially_independent: true
+
+coverage:
+  enforce_complete: true
+  expected_days_per_year: 92
+  expected_total_days: 1656
+  expected_product_days: 1642
+  allowed_missing_dates:
+    - 20070803
+    - 20070909
+    - 20070918
+    - 20070919
+    - 20081027
+    - 20091001
+    - 20100831
+    - 20100901
+    - 20100902
+    - 20100903
+    - 20111023
+    - 20111024
+    - 20130802
+    - 20130809

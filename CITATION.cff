@@ -1,0 +1,38 @@
+cff-version: 1.2.0
+message: >-
+  If you use this software, please cite it using the metadata in this file.
+title: CO Column Reconstruction
+type: software
+version: 0.1.0
+date-released: 2026-09-30
+repository-code: "https://github.com/YasoUwU/co-column-reconstruction"
+authors:
+  - family-names: de Bem
+    given-names: Douglas Lima
+    orcid: "https://orcid.org/0000-0002-7199-7405"
+    affiliation: >-
+      LICIIS, LRC DIGIT, Université de Reims Champagne-Ardenne, Reims, France;
+      Department of Physics, Federal University of Santa Maria, Santa Maria, Brazil
+  - family-names: Steffenel
+    given-names: Luiz Angelo
+    orcid: "https://orcid.org/0000-0003-3670-4088"
+    affiliation: >-
+      Université de Reims Champagne-Ardenne, Laboratoire d'Informatique en Calcul Intensif
+      et Image pour la Simulation (LICIIS, UR 3690 LRC DIGIT)
+  - family-names: Bencherif
+    given-names: El Hassan
+    orcid: "https://orcid.org/0000-0003-1815-0667"
+    affiliation: >-
+      Laboratoire de l'Atmosphère et des Cyclones (LACy), UMR 8105, CNRS, Météo-France,
+      Université de La Réunion
+keywords:
+  - carbon monoxide
+  - satellite remote sensing
+  - atmospheric reanalysis
+  - machine learning
+  - biomass burning
+license: BSD-3-Clause
+abstract: >-
+  Reproducible pipeline for daily total-column carbon monoxide reconstruction across the South
+  America-Atlantic-southern Africa corridor using IASI, CAMS EAC4, MERRA-2 and
+  multi-satellite validation.

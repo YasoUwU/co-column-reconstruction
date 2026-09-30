@@ -1,0 +1,109 @@
+"""Canonical dependency graph. Scientific logic lives in the Python package."""
+
+import os
+
+configfile: "configs/reviewed.yaml"
+
+PROFILE = config["profile"]
+OUTPUT = os.environ["CO_OUTPUT_ROOT"]
+MANIFESTS = f"{OUTPUT}/{PROFILE}/manifests"
+PIPELINE_CONFIG = workflow.configfiles[-1]
+
+
+rule all:
+    input:
+        f"{MANIFESTS}/figures.json"
+
+
+rule grid_iasi:
+    output:
+        f"{MANIFESTS}/grid-iasi.json"
+    shell:
+        "co-pipeline grid-iasi --config {PIPELINE_CONFIG}"
+
+
+rule merra2_daily:
+    output:
+        f"{MANIFESTS}/merra2-daily.json"
+    shell:
+        "co-pipeline merra2-daily --config {PIPELINE_CONFIG}"
+
+
+rule download_cams:
+    output:
+        f"{MANIFESTS}/download-cams.json"
+    shell:
+        "co-pipeline download-cams --config {PIPELINE_CONFIG}"
+
+
+rule common_grid:
+    input:
+        f"{MANIFESTS}/grid-iasi.json",
+        f"{MANIFESTS}/merra2-daily.json",
+        f"{MANIFESTS}/download-cams.json",
+    output:
+        f"{MANIFESTS}/common-grid.json"
+    shell:
+        "co-pipeline common-grid --config {PIPELINE_CONFIG}"
+
+
+rule benchmark:
+    input:
+        f"{MANIFESTS}/common-grid.json"
+    output:
+        f"{MANIFESTS}/benchmark.json"
+    shell:
+        "co-pipeline benchmark --config {PIPELINE_CONFIG}"
+
+
+rule train:
+    input:
+        f"{MANIFESTS}/benchmark.json"
+    output:
+        f"{MANIFESTS}/train.json"
+    shell:
+        "co-pipeline train --config {PIPELINE_CONFIG}"
+
+
+rule apply:
+    input:
+        f"{MANIFESTS}/train.json"
+    output:
+        f"{MANIFESTS}/apply.json"
+    shell:
+        "co-pipeline apply --config {PIPELINE_CONFIG}"
+
+
+rule download_validation:
+    output:
+        f"{MANIFESTS}/download-validation.json"
+    shell:
+        "co-pipeline download-validation --config {PIPELINE_CONFIG}"
+
+
+rule validation_grid:
+    input:
+        f"{MANIFESTS}/apply.json",
+        f"{MANIFESTS}/download-validation.json",
+    output:
+        f"{MANIFESTS}/validation-grid.json"
+    shell:
+        "co-pipeline validation-grid --config {PIPELINE_CONFIG}"
+
+
+rule validate:
+    input:
+        f"{MANIFESTS}/validation-grid.json"
+    output:
+        f"{MANIFESTS}/validate.json"
+    shell:
+        "co-pipeline validate --config {PIPELINE_CONFIG}"
+
+
+rule figures:
+    input:
+        f"{MANIFESTS}/validate.json"
+    output:
+        f"{MANIFESTS}/figures.json"
+    shell:
+        "co-pipeline figures --config {PIPELINE_CONFIG}"
